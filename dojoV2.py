@@ -18,14 +18,15 @@ def calc_partial(books):
     quantity = len(books)
     return round(DISCOUNT[quantity - 1] * quantity * PRICE, 2)
     
-def make_groups(books, r=None):
+def make_groups(books):
     unique = []
 
     while books:
         group = []
         for i in books:
             if i not in group:
-                group.append(i)
+                if (len(set(group)) < 4 or len(books) < 6)  or (len(set(books)) > len(set(group)) + 1):
+                    group.append(i)
         for i in group:
             books.remove(i)
         unique.append(group)
@@ -52,6 +53,7 @@ from unittest import TestCase
 import unittest
 
 class BasketTest(TestCase):
+    
     def test_zero_books(self):
         self.assertEqual(calc_price([]), 0)
     def test_one_book(self):
@@ -72,12 +74,10 @@ class BasketTest(TestCase):
         self.assertEquals(calc_price([1,1,2,2,3]), round((28 * 3 * 0.9) + (28 * 2 * 0.95), 2))
     def test_rape_world(self):
         self.assertEquals(calc_price([1,1,1,1,1,3,3,5,5,5,5,5,5,5]), round((6 * 28 * 0.9) + (6 * 28 * 0.95) + (2 * 28), 2))
-
+    
     def test_mind_fuck(self):
         self.assertEquals(calc_price([1, 2, 3, 4, 1, 2, 3, 5]),
                           round(4 * 28 * 0.8 * 2, 2))
-
-	# 1, 3, 5 / 1, 3, 5 / 1, 5 / 1, 5 / 1, 5 / 5 5        
 
 
 unittest.main()
